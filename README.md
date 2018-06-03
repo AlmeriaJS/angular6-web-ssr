@@ -52,7 +52,7 @@ webpack                           4.8.3
 
 ## Pasos 
 
-### step-1
+### Inicial
 
 Generamos el proyecto con angular-cli. 
 Vamos a usar sass y he decidido quiar los tests puesto que no los vamos a usar en esta demo. 
@@ -67,3 +67,37 @@ Ya podemos ver la app funcionando en http://localhost:4200/
 ng serve
 ````
 
+### step-1
+
+Lo primero que haremos será añadir a la app la librería de angular material. Gracias a schematics (Vngular v6+) podemos hacerlo tan sencillo como
+
+```bash
+ng add @angular/material
+```
+
+La web / app la hemos diseñado con 3 componentes (además del componente principal **app-component**). 
+
+1 - El componente de la descripción general que vamos a llamar **app-main-description**
+```bash
+ng generate component components/main-description
+```
+
+2 - El componente que listará los proyectos **app-projects** 
+```bash
+ng generate component components/projects
+```
+
+3 - El componente de "enlaces de redes sociales" que usaremos dentro de los otros dos componentes y llamaremos **app-social-links**
+```bash
+ng generate component components/social-links
+```
+
+Y modificamos el componente principal para mostrarlo los nuevos componentes y comprobar que todo funciona correctamente
+
+app.component.html
+
+```html
+<app-main-description></app-main-description>
+<app-projects></app-projects>
+<app-social-links></app-social-links>
+```
