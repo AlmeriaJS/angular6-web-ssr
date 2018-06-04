@@ -61,7 +61,7 @@ export class MyDataService {
           title: 'Runnerty',
           desc: `Herramienta de software libre escrita en NodeJS que te permite gestionar y planificar tus procesos. Céntrate en la lógica de negocio y olvídate de gestionar dependencias entre procesos, jobs, gestión de errores o notificaciones.`,
           subtitle: 'Process Orchestrator',
-          imgSrc: 'assets/runnerty-logo2.png',
+          imgSrc: 'assets/runnerty-logo.png',
           imgAlt: 'Logo runnerty',
           socialLinks: [
             {
