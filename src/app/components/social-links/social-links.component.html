@@ -1,3 +1,5 @@
-<p>
-  social-links works!
-</p>
+<a [href]="socialLink?.link"
+  target="_blank"
+  *ngFor="let link of socialLinks">
+  <mat-icon color="primary">{{link.matIcon}}</mat-icon>
+</a>
