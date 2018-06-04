@@ -40,18 +40,22 @@ export class MyDataService {
           imgAlt: 'Logo Coderty',
           socialLinks: [
             {
+              matIcon: 'home',
               icon: 'fa-svg fa-earth',
               link: 'http://coderty.com'
             },
             {
+              matIcon: 'share',
               icon: 'fa-svg fa-github',
               link: 'https://github.com/coderty'
             },
             {
+              matIcon: 'web',
               icon: 'fa-svg fa-linkedin',
               link: 'https://www.linkedin.com/company/coderty/'
             },
             {
+              matIcon: 'photo',
               icon: 'fa-svg fa-instagram',
               link: 'https://www.instagram.com/coderty/'
             }
@@ -65,10 +69,12 @@ export class MyDataService {
           imgAlt: 'Logo runnerty',
           socialLinks: [
             {
+              matIcon: 'flight',
               icon: 'fa-svg fa-twitter',
               link: 'https://twitter.com/aloDev'
             },
             {
+              matIcon: 'share',
               icon: 'fa-svg fa-github',
               link: 'https://github.com/alo'
             },
@@ -86,14 +92,17 @@ export class MyDataService {
           imgAlt: 'Logo AlmeriaJS',
           socialLinks: [
             {
+              matIcon: 'flight',
               icon: 'fa-svg fa-twitter',
               link: 'https://twitter.com/almeriajs'
             },
             {
+              matIcon: 'share',
               icon: 'fa-svg fa-github',
               link: 'https://github.com/almeriajs'
             },
             {
+              matIcon: 'home',
               icon: 'fa-svg fa-meetup',
               link: 'https://www.meetup.com/almeriajs/'
             }

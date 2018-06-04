@@ -231,7 +231,6 @@ export class AppComponent {
     this.data = this.myDataService.getData();
   }
 }
-
 ```
 
 ```html
@@ -242,4 +241,59 @@ export class AppComponent {
 <app-projects></app-projects>
 ```
 
-Ahora sí, empezamos a ver algo! 
+Ahora sí, empezamos a ver algo!
+
+### step-3
+
+Ahora preapramos el componente de para mostrar los proyectos **projects.component**
+
+```html
+<h2 style="text-align: center">
+    Últimos proyectos</h2>
+
+<mat-card *ngFor="let project of projects"
+    style="margin-bottom: 30px">
+    <mat-card-header>
+        <mat-card-title>{{project.title}}</mat-card-title>
+        <mat-card-subtitle>{{project.subtitle}}</mat-card-subtitle>
+    </mat-card-header>
+    <div style="width: 100%; height: 200px; text-align: center;">
+        <img matCardImage
+            style="width: 200px; margin: 0px"
+            [src]="project.imgSrc"
+            [alt]="project.imgAlt">
+    </div>
+    <mat-card-content>
+        {{project.desc}}
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <app-social-links [socialLinks]="project.socialLinks"></app-social-links>
+    </mat-card-actions>
+</mat-card>
+```
+
+```typescript
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-projects',
+  templateUrl: './projects.component.html',
+  styleUrls: ['./projects.component.sass']
+})
+export class ProjectsComponent {
+  @Input() projects;
+  constructor() {}
+}
+```
+
+Y desde nuestro componente principal le pasamos los datos que nos faltan 
+
+```html
+<app-main-description [name]="data.name"
+  [mainDescription]="data.description"
+  [position]="data.position"
+  [socialLinks]="data.socialLinks"></app-main-description>
+<app-projects [projects]="data.projects"></app-projects>
+```
+
+¡Ya tenemos la sección de proyectos!
