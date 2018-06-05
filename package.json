@@ -7,11 +7,15 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:u": "ng build --prod --output-hashing=none && ng run angular6-web-ssr:server",
+    "serve:u": "node dist/index.js",
+    "tsc:server": "tsc -p server/tsconfig.ssr.json"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^6.0.3",
+    "@angular/cdk": "^6.2.0",
     "@angular/common": "^6.0.3",
     "@angular/compiler": "^6.0.3",
     "@angular/core": "^6.0.3",
@@ -20,11 +24,17 @@
     "@angular/material": "^6.2.0",
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
+    "@angular/platform-server": "^6.0.3",
     "@angular/router": "^6.0.3",
+    "@nguniversal/express-engine": "^6.0.0",
+    "@nguniversal/module-map-ngfactory-loader": "^6.0.0",
     "core-js": "^2.5.4",
+    "express": "^4.16.3",
+    "firebase-functions": "^1.0.4",
+    "fs": "^0.0.1-security",
+    "reflect-metadata": "^0.1.12",
     "rxjs": "^6.0.0",
-    "zone.js": "^0.8.26",
-    "@angular/cdk": "^6.2.0"
+    "zone.js": "^0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.6.6",
@@ -45,6 +55,7 @@
     "protractor": "~5.3.0",
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
-    "typescript": "~2.7.2"
+    "typescript": "~2.7.2",
+    "webpack-cli": "^3.0.2"
   }
 }

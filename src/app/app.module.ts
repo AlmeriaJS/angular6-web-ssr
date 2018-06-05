@@ -18,7 +18,7 @@ import { SocialLinksComponent } from './components/social-links/social-links.com
     SocialLinksComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     MatCardModule,
     MatIconModule

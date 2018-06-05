@@ -286,7 +286,7 @@ export class ProjectsComponent {
 }
 ```
 
-Y desde nuestro componente principal le pasamos los datos que nos faltan 
+Y desde nuestro componente principal le pasamos los datos que nos faltan
 
 ```html
 <app-main-description [name]="data.name"
@@ -297,3 +297,160 @@ Y desde nuestro componente principal le pasamos los datos que nos faltan
 ```
 
 ¡Ya tenemos la sección de proyectos!
+
+### step-4
+
+Let's SSR!
+
+```bash
+ng generate universal --client-project="angular6-web-ssr"
+```
+
+Este comando crea o modifica los siguientes ficheros
+
+```bash
+CREATE src/main.server.ts (220 bytes)
+CREATE src/app/app.server.module.ts (318 bytes)
+CREATE src/tsconfig.server.json (245 bytes)
+UPDATE package.json (1427 bytes)
+UPDATE angular.json (4728 bytes)
+UPDATE src/main.ts (430 bytes)
+UPDATE src/app/app.module.ts (921 bytes)
+```
+
+**app/app.server.module.ts**: ng module para el servidor, con este módulo podremos crear nuestro Universal Bundle!
+
+**main.server.ts**: así es como exportamos nuestro app.server.module, pero esto es ts y no está dentro de Angular, con lo que se nos ha generado el siguiente archivo
+
+**tsconfig.server.json**: nos va a servir para transpilar el archivo main.server.ts a Javascript que pueda entender el servidor. Dentro de este fichero, lo "más importante" es especificar el módulo sobre el que compilamos nuestro ts. Por defecto compilamos en ES2015 y nodejs no es capaz de interpretarlo, por eso usamos **commonjs**
+
+**angular.json**
+En este fichero tenemos algunas opciones de configuración y se nos ha creado una nueva
+
+```json
+...
+"server": {
+  "builder": "@angular-devkit/build-angular:server",
+  "options": {
+    "outputPath": "dist/angular6-web-ssr-server",
+    "main": "src/main.server.ts",
+    "tsConfig": "src/tsconfig.server.json"
+  }
+}
+...
+```
+
+Con esto generemos nuestro Universal bundle pero ... necesitamos un servidor express para ejecutarlo ..
+
+Antes de nada instalamos los paquetes necesarions
+
+```bash
+yarn add @nguniversal/module-map-ngfactory-loader @nguniversal/express-engine express reflect-metadata
+```
+
+Creamos una carpeta **server** donde se encontrará nuestro servidor express.
+
+Dentro creamos dos archivos:
+
+* index.ts
+
+```ts
+// These are important and needed before anything else
+import 'zone.js/dist/zone-node';
+import 'reflect-metadata';
+
+import { enableProdMode } from '@angular/core';
+import * as express from 'express';
+import { join } from 'path';
+
+// NOTE: leave this as require() since this file is built Dynamically from webpack
+const {
+  AppServerModuleNgFactory,
+  LAZY_MODULE_MAP
+} = require('./angular6-web-ssr-server/main');
+
+// NgUniversalTools: Express Engine and moduleMap for lazy loading
+import { ngExpressEngine } from '@nguniversal/express-engine';
+import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
+
+// Faster server renders w/ Prod mode (dev mode never needed)
+enableProdMode();
+
+// Express server
+const app = express();
+const PORT = process.env.PORT || 4000;
+const DIST_FOLDER = join(process.cwd(), 'dist');
+
+app.engine(
+  'html',
+  ngExpressEngine({
+    bootstrap: AppServerModuleNgFactory,
+    providers: [provideModuleMap(LAZY_MODULE_MAP)]
+  })
+);
+
+app.set('view engine', 'html');
+app.set('views', join(DIST_FOLDER, 'angular6-web-ssr-server'));
+
+// Server static files from browser
+app.get('*.*', express.static(join(DIST_FOLDER, 'angular6-web-ssr')));
+
+// All regular routes use the Universal engine
+app.get('*', (req, res) => {
+  res.render(join(DIST_FOLDER, 'angular6-web-ssr', 'index.html'), { req });
+});
+
+// Start up the Node server
+app.listen(PORT, () => {
+  console.log(`Node server listening on http://localhost:${PORT}`);
+});
+```
+
+* tsconfig.ssr.json
+
+```json
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../dist",
+    "sourceMap": false,
+    "baseUrl": "./",
+    "module": "commonjs",
+    "types": ["node"]
+  },
+  "files": ["index.ts"],
+  "exclude": ["**/*.test.ts", "**/*.spec.ts"]
+}
+```
+
+Añadimos los siguientes scripts a nuestro **package.json**
+
+```json
+"scripts": {
+  ...
+  "build:u": "ng build --prod --output-hashing=none && ng run angular6-web-ssr:server",
+  "serve:u": "node dist/index.js",
+  "tsc:server": "tsc -p server/tsconfig.ssr.json"
+}
+```
+
+Para compilar nuestro servidor express **server/index.ts** que hemos escrito en Typescript, lanzamos el comando
+
+```bash
+yarn run tsc:server
+```
+
+Para compilar nuestra app Angular (tanto la de cliente, como la de servidor) usamos el comando
+
+```bash
+yarn run build:u
+```
+
+Y para lanzar el servidor express que hemos creado, usamos el comando
+
+```bash
+yarn run serve:u
+```
+
+¡BOOOM! O es porque todo ha ido correctamente o porque todo a explotado, pero oirás este sonido ... 
+
