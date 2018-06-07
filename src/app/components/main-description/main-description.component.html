@@ -1,0 +1,16 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Hola, soy {{name}}!</mat-card-title>
+        <mat-card-subtitle>{{position}}</mat-card-subtitle>
+    </mat-card-header>
+    <img matCardImage
+        align="center"
+        src="assets/profile.jpeg"
+        style="max-width:300px; margin: 0 auto;">
+    <mat-card-content>
+        {{mainDescription}}
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <app-social-links [socialLinks]="socialLinks"></app-social-links>
+    </mat-card-actions>
+</mat-card>
